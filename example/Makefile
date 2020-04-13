@@ -1,19 +1,23 @@
 SRCS=main.s
 OBJS=$(subst .s,.o,$(SRCS))
-TARGET=example.exe
+NATIVE_TARGET=example.exe
+BIN_TARGET=example.bin
 
 .PHONY: all tidy clean
 
-all: $(TARGET)
+all: $(BIN_TARGET)
 
 %.o: %.s
 	$(AS) $< -o $@
 
-$(TARGET): $(OBJS)
+$(BIN_TARGET): $(NATIVE_TARGET)
+	objcopy -j .text -O binary $< $@
+
+$(NATIVE_TARGET): $(OBJS)
 	$(LD) $< -o $@
 
 tidy:
 	rm -f $(OBJS)
 
 clean: tidy
-	rm -f $(TARGET)
+	rm -f $(BIN_TARGET) $(NATIVE_TARGET)
