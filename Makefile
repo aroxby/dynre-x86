@@ -4,7 +4,7 @@ ZYDIS_REPO=https://github.com/zyantific/zydis.git
 ZYDIS_TAG=v3.1.0
 ZYDIS_DIR=$(EXT_DIR)/zydis
 ZYDIS_BUILD_DIR=$(ZYDIS_DIR)/build
-ZYDIS_OUT=$(ZYDIS_DIR)/$(TBD)
+ZYDIS_OUT=$(ZYDIS_BUILD_DIR)/libZydis.a
 
 DEPENDS=$(ZYDIS_OUT)
 
@@ -31,7 +31,7 @@ $(ZYDIS_BUILD_DIR): $(ZYDIS_DIR)
 	$(CMAKE) -S $< -B $@ -G 'Unix Makefiles'
 
 $(ZYDIS_OUT): $(ZYDIS_BUILD_DIR)
-	false  # TBD
+	$(MAKE) -C $<
 
 depend: $(DEPENDS)
 
