@@ -4,6 +4,7 @@ ZYDIS_REPO=https://github.com/zyantific/zydis.git
 ZYDIS_TAG=v3.1.0
 ZYDIS_DIR=$(EXT_DIR)/zydis
 ZYDIS_BUILD_DIR=$(ZYDIS_DIR)/build
+ZYDIS_MAKEFILE=$(ZYDIS_BUILD_DIR)/Makefile
 ZYDIS_OUT=$(ZYDIS_BUILD_DIR)/libZydis.a
 
 DEPENDS=$(ZYDIS_OUT)
@@ -27,11 +28,11 @@ GIT=git
 $(ZYDIS_DIR):
 	$(GIT) clone $(GIT_FLAGS) $(ZYDIS_REPO) -b $(ZYDIS_TAG) $@
 
-$(ZYDIS_BUILD_DIR): $(ZYDIS_DIR)
-	$(CMAKE) -S $< -B $@ -G 'Unix Makefiles'
+$(ZYDIS_MAKEFILE): $(ZYDIS_DIR)
+	$(CMAKE) -S $< -B $(shell dirname $@) -G 'Unix Makefiles'
 
-$(ZYDIS_OUT): $(ZYDIS_BUILD_DIR)
-	$(MAKE) -C $<
+$(ZYDIS_OUT): $(ZYDIS_MAKEFILE)
+	$(MAKE) -C $(shell dirname $<)
 
 depend: $(DEPENDS)
 
