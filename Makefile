@@ -6,17 +6,25 @@ ZYDIS_DIR=$(EXT_DIR)/zydis
 ZYDIS_BUILD_DIR=$(ZYDIS_DIR)/build
 ZYDIS_MAKEFILE=$(ZYDIS_BUILD_DIR)/Makefile
 ZYDIS_OUT=$(ZYDIS_BUILD_DIR)/libZydis.a
+ZYCORE_DIR=$(ZYDIS_DIR)/dependencies/zycore
+ZYCORE_BUILD_DIR=$(ZYDIS_BUILD_DIR)/zycore
+ZYCORE_INC=$(ZYCORE_DIR)/include $(ZYCORE_BUILD_DIR)
+ZYDIS_INC=$(ZYDIS_DIR)/include  $(ZYDIS_BUILD_DIR) $(ZYCORE_INC)
 
 DEPENDS=$(ZYDIS_OUT)
 
 EXT_INC=$(ZYDIS_INC)
+EXT_LIB_DIRS=$(ZYDIS_BUILD_DIR)
 SRC_INC=src
 INC=$(SRC_INC) $(EXT_INC)
-CPPFLAGS=$(foreach d, $(INC), -I$d)
+LIBS=Zydis
+LIB_DIRS=$(EXT_LIB_DIRS)
+CPPFLAGS=$(foreach d, $(INC), -I$d) $(foreach d, $(LIB_DIRS), -L$d) $(foreach l, $(LIBS), -l$l)
 GIT_FLAGS=--recursive -c advice.detachedHead=false --depth=1
 SRC_DIR=src
 SRCS=$(shell find $(SRC_DIR) -name *.cpp)
 OBJS=$(subst .cpp,.o,$(SRCS))
+TARGET=dynre-x86.exe
 
 AR=ar
 CMAKE=cmake
@@ -24,6 +32,8 @@ CPP=g++
 GIT=git
 
 .PHONY: all depend tidy clean
+
+all: $(TARGET)
 
 $(ZYDIS_DIR):
 	$(GIT) clone $(GIT_FLAGS) $(ZYDIS_REPO) -b $(ZYDIS_TAG) $@
@@ -38,6 +48,9 @@ depend: $(DEPENDS)
 
 %.o: %.cpp $(DEPENDS)
 	$(CPP) $(CPPFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJS)
+	$(CPP) $< $(CPPFLAGS) -o $@
 
 tidy:
 	rm -f $(OBJS)
