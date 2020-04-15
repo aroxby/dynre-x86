@@ -22,7 +22,7 @@ CMAKE=cmake
 CPP=g++
 GIT=git
 
-.PHONY: all depend tidu clean
+.PHONY: all depend tidy clean
 
 $(ZYDIS_DIR):
 	$(GIT) clone $(GIT_FLAGS) $(ZYDIS_REPO) -b $(ZYDIS_TAG) $@
