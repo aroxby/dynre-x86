@@ -20,4 +20,4 @@ tidy:
 	rm -f $(OBJS)
 
 clean: tidy
-	rm -f $(BIN_TARGET) $(NATIVE_TARGET)
+	rm -f $(BIN_TARGET) -f $(NATIVE_TARGET)
