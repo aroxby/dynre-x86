@@ -39,7 +39,8 @@ $(ZYDIS_DIR):
 	$(GIT) clone $(GIT_FLAGS) $(ZYDIS_REPO) -b $(ZYDIS_TAG) $@
 
 $(ZYDIS_MAKEFILE): $(ZYDIS_DIR)
-	$(CMAKE) -S $< -B $(shell dirname $@) -G 'Unix Makefiles'
+	mkdir $(shell dirname $@)
+	cd $(shell dirname $@) && $(CMAKE) -S $< .. -G 'Unix Makefiles'
 
 $(ZYDIS_OUT): $(ZYDIS_MAKEFILE)
 	$(MAKE) -C $(shell dirname $<)
