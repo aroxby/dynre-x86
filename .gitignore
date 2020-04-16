@@ -1,4 +1,8 @@
+# Build artifacts
 *.s
 *.o
 *.exe
 *.bin
+
+# External dependencies
+/external/
