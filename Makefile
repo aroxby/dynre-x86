@@ -56,6 +56,7 @@ tidy:
 	rm -f $(OBJS)
 
 clean: tidy
+	rm -f $(TARGET)
 
 dist-clean: clean
 	rm -rf $(EXT_DIR)
