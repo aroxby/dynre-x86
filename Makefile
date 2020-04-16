@@ -24,7 +24,7 @@ GIT_FLAGS=--recursive -c advice.detachedHead=false --depth=1
 SRC_DIR=src
 SRCS=$(shell find $(SRC_DIR) -name *.cpp)
 OBJS=$(subst .cpp,.o,$(SRCS))
-TARGET=dynre-x86.exe
+TARGET=dynre-x86
 
 AR=ar
 CMAKE=cmake

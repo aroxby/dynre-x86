@@ -6,4 +6,4 @@ COPY . /src
 WORKDIR src
 
 RUN make
-CMD ./dynre-x86.exe
+CMD ./dynre-x86
