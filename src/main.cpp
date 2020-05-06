@@ -27,9 +27,32 @@ int main()
         printf("%p ", runtime_address + offset);
 
         const char *name = ZydisMnemonicGetString(instruction.mnemonic);
-        printf("%s ", name);
-        // TODO: print operands
+        printf("%p ", runtime_address + offset);
         printf("(%i) ", instruction.length);
+        printf("%s ", name);
+
+        for(int i = 0; i < instruction.operand_count; i++) {
+            auto operand = instruction.operands[i];
+
+            switch (operand.type)
+            {
+            case ZYDIS_OPERAND_TYPE_REGISTER:
+                printf("R");
+                break;
+            case ZYDIS_OPERAND_TYPE_MEMORY:
+                printf("M");
+                break;
+            case ZYDIS_OPERAND_TYPE_POINTER:
+                printf("P");
+                break;
+            case ZYDIS_OPERAND_TYPE_IMMEDIATE:
+                printf("I");
+                break;
+            default:
+                printf("?");
+            }
+        }
+
         printf("%c\n", instruction.meta.branch_type ? '^' : '|');
 
         offset += instruction.length;
