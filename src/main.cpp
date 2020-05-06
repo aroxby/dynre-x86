@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <Zydis/Zydis.h>
+#include "register_names.h"
 
 int main()
 {
@@ -52,7 +53,7 @@ int main()
             switch (operand.type)
             {
             case ZYDIS_OPERAND_TYPE_REGISTER:
-                printf("R");
+                printf("%s ", zydis_register_names[operand.reg.value]);
                 break;
             case ZYDIS_OPERAND_TYPE_MEMORY:
                 printf("M");
