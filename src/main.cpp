@@ -14,6 +14,11 @@ int main()
     ZydisDecoder decoder;
     ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_ADDRESS_WIDTH_64);
 
+    // Initialize formatter. Only required when you actually plan to do instruction
+    // formatting ("disassembling"), like we do here
+    ZydisFormatter formatter;
+    ZydisFormatterInit(&formatter, ZYDIS_FORMATTER_STYLE_INTEL);
+
     // Loop over the instructions in our buffer.
     // The runtime-address (instruction pointer) is chosen arbitrary here in order to better
     // visualize relative addressing
@@ -24,7 +29,15 @@ int main()
     while (ZYAN_SUCCESS(ZydisDecoderDecodeBuffer(&decoder, data + offset, length - offset,
         &instruction)))
     {
+        // Print current instruction pointer.
         printf("%p ", runtime_address + offset);
+
+        // Format & print the binary instruction structure to human readable format
+        char buffer[256];
+        ZydisFormatterFormatInstruction(&formatter, &instruction, buffer, sizeof(buffer),
+            runtime_address + offset);
+        puts(buffer);
+
 
         const char *name = ZydisMnemonicGetString(instruction.mnemonic);
         printf("%p ", runtime_address + offset);
