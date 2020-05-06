@@ -65,7 +65,7 @@ int main()
                 printf("I");
                 break;
             default:
-                printf("?");
+                printf("? ");
             }
         }
 
