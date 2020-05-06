@@ -51,7 +51,7 @@ depend: $(DEPENDS)
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJS)
-	$(CPP) $< $(CPPFLAGS) -o $@
+	$(CPP) $^ $(CPPFLAGS) -o $@
 
 tidy:
 	rm -f $(OBJS)
