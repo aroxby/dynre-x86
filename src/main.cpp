@@ -56,7 +56,14 @@ int main()
                 printf("%s ", zydis_register_names[operand.reg.value]);
                 break;
             case ZYDIS_OPERAND_TYPE_MEMORY:
-                printf("M");
+            {
+                const char *segment = zydis_register_names[operand.mem.segment];
+                const char *base = zydis_register_names[operand.mem.base];
+                const char *index = zydis_register_names[operand.mem.index];
+                const int scale = operand.mem.scale;
+                const ZyanI64 displacement = operand.mem.disp.value;
+                printf("[%s:%s + %s:%x * %x] ", segment, base, index, displacement, scale + 1);
+            }
                 break;
             case ZYDIS_OPERAND_TYPE_POINTER:
                 printf("[%x:%x] ", operand.ptr.segment, operand.ptr.offset);
