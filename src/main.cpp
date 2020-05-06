@@ -44,6 +44,8 @@ int main()
         printf("(%i) ", instruction.length);
         printf("%s ", name);
 
+        // Every instruction has an oddly high number of operands.
+        // Are some these implied?  It seems to be the case (eg: CALL uses rip)
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
 
