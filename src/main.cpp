@@ -59,10 +59,10 @@ int main()
                 printf("M");
                 break;
             case ZYDIS_OPERAND_TYPE_POINTER:
-                printf("P");
+                printf("[%x:%x] ", operand.ptr.segment, operand.ptr.offset);
                 break;
             case ZYDIS_OPERAND_TYPE_IMMEDIATE:
-                printf("I");
+                printf("%x ", operand.imm.value);
                 break;
             default:
                 printf("? ");
