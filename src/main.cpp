@@ -62,7 +62,10 @@ int main()
                 const char *index = zydis_register_names[operand.mem.index];
                 const int scale = operand.mem.scale;
                 const ZyanI64 displacement = operand.mem.disp.value;
-                printf("[%s:%s + %s:%x * %x] ", segment, base, index, displacement, scale + 1);
+                printf(
+                    "[%s:%s + %s:%x * %x] ",
+                    segment, base, index, displacement, scale + 1
+                );
             }
                 break;
             case ZYDIS_OPERAND_TYPE_POINTER:
