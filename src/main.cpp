@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstring>
 #include <Zydis/Zydis.h>
 #include "register_names.h"
 
@@ -47,7 +48,6 @@ int main()
 
         // TODO:
         // Figure out how to  display negative displacements
-        // Figure out how to remove default segments
         // Figure out how to remove RIP from CALL operands
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
@@ -67,6 +67,11 @@ int main()
                 const char *index = zydis_register_names[operand.mem.index];
                 const int scale = operand.mem.scale;
                 const ZyanI64 displacement = operand.mem.disp.value;
+                
+                if(!(instruction.attributes & ZYDIS_ATTRIB_HAS_SEGMENT)) {
+                    segment = "";
+                }
+ 
                 printf(
                     "[%s:%s + %s:%x * %x] ",
                     segment, base, index, displacement, scale + 1
