@@ -45,8 +45,10 @@ int main()
         printf("(%i) ", instruction.length);
         printf("%s ", name);
 
-        // Every instruction has an oddly high number of operands.
-        // Are some these implied?  It seems to be the case (eg: CALL uses rip)
+        // TODO:
+        // Figure out how to  display negative displacements
+        // Figure out how to remove default segments
+        // Figure out how to remove RIP from CALL operands
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
             if (operand.visibility == ZYDIS_OPERAND_VISIBILITY_HIDDEN) {
