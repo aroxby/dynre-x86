@@ -49,6 +49,9 @@ int main()
         // Are some these implied?  It seems to be the case (eg: CALL uses rip)
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
+            if (operand.visibility == ZYDIS_OPERAND_VISIBILITY_HIDDEN) {
+                continue;
+            }
 
             switch (operand.type)
             {
