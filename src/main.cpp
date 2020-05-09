@@ -3,6 +3,13 @@
 #include <Zydis/Zydis.h>
 #include "register_names.h"
 
+void dumpBytes(const ZyanU8 *data, int len) {
+    for(int i = 0; i < len; i++) {
+        printf("%02x", data[i]);
+    }
+    printf(" ");
+}
+
 int main()
 {
     ZyanU8 data[] =
@@ -43,7 +50,7 @@ int main()
 
         const char *name = ZydisMnemonicGetString(instruction.mnemonic);
         printf("%p ", runtime_address + offset);
-        printf("(%i) ", instruction.length);
+        dumpBytes(data + offset, instruction.length);
         printf("%s ", name);
 
         // TODO:
@@ -67,11 +74,11 @@ int main()
                 const char *index = zydis_register_names[operand.mem.index];
                 const int scale = operand.mem.scale;
                 const ZyanI64 displacement = operand.mem.disp.value;
-                
+
                 if(!(instruction.attributes & ZYDIS_ATTRIB_HAS_SEGMENT)) {
                     segment = "";
                 }
- 
+
                 printf(
                     "[%s:%s + %s:%x * %x] ",
                     segment, base, index, displacement, scale + 1
