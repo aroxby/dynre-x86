@@ -56,6 +56,8 @@ int main()
         // TODO:
         // Figure out how to  display negative displacements
         // Figure out how to remove RIP from CALL operands
+        //  Related:
+        //  https://github.com/zyantific/zydis/blob/13d5a52c3bb18a5795fa11553c467ca0251ad808/src/FormatterIntel.c#L209
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
             if (operand.visibility == ZYDIS_OPERAND_VISIBILITY_HIDDEN) {
