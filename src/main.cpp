@@ -53,11 +53,7 @@ int main()
         dumpBytes(data + offset, instruction.length);
         printf("%s ", name);
 
-        // TODO:
-        // Figure out how to  display negative displacements
-        // Figure out how to remove RIP from CALL operands
-        //  Related:
-        //  https://github.com/zyantific/zydis/blob/13d5a52c3bb18a5795fa11553c467ca0251ad808/src/FormatterIntel.c#L209
+        // TODO: Rewrite output to support negative hex values
         for(int i = 0; i < instruction.operand_count; i++) {
             auto operand = instruction.operands[i];
             if (operand.visibility == ZYDIS_OPERAND_VISIBILITY_HIDDEN) {
@@ -71,6 +67,12 @@ int main()
                 break;
             case ZYDIS_OPERAND_TYPE_MEMORY:
             {
+                // Zydis shows some registers that are never explicitly used
+                ZydisRegisterClass base_cls = ZydisRegisterGetClass(operand.mem.base);
+                if(base_cls == ZYDIS_REGCLASS_IP) {
+                    operand.mem.base = ZYDIS_REGISTER_NONE;
+                }
+
                 const char *segment = zydis_register_names[operand.mem.segment];
                 const char *base = zydis_register_names[operand.mem.base];
                 const char *index = zydis_register_names[operand.mem.index];
