@@ -1,13 +1,15 @@
-#include <cstdio>
-#include <cstring>
+#include <iostream>
+#include <iomanip>
 #include <Zydis/Zydis.h>
 #include "register_names.h"
+using namespace std;
 
 void dumpBytes(const ZyanU8 *data, int len) {
+    cout << setfill('0') << hex;
     for(int i = 0; i < len; i++) {
-        printf("%02x", data[i]);
+        cout << setw(2) << int(data[i]);
     }
-    printf(" ");
+    cout << ' ';
 }
 
 int main()
@@ -49,9 +51,9 @@ int main()
 
 
         const char *name = ZydisMnemonicGetString(instruction.mnemonic);
-        printf("%p ", runtime_address + offset);
+        cout << setw(16) << setfill('0') << hex << runtime_address + offset << ' ';
         dumpBytes(data + offset, instruction.length);
-        printf("%s ", name);
+        cout << name << ' ';
 
         // TODO: Rewrite output to support negative hex values
         for(int i = 0; i < instruction.operand_count; i++) {
@@ -63,7 +65,7 @@ int main()
             switch (operand.type)
             {
             case ZYDIS_OPERAND_TYPE_REGISTER:
-                printf("%s ", zydis_register_names[operand.reg.value]);
+                cout << zydis_register_names[operand.reg.value] << ' ';
                 break;
             case ZYDIS_OPERAND_TYPE_MEMORY:
             {
@@ -83,24 +85,25 @@ int main()
                     segment = "";
                 }
 
-                printf(
-                    "[%s:%s + %s:%x * %x] ",
-                    segment, base, index, displacement, scale + 1
-                );
+                cout << '[' << segment << ':' << base
+                    << " + " << index << ':' << displacement
+                    << " *" << scale + 1 << "] ";
             }
                 break;
             case ZYDIS_OPERAND_TYPE_POINTER:
                 printf("[%x:%x] ", operand.ptr.segment, operand.ptr.offset);
+                cout << '[' << setw(16) << setfill('0') << hex << operand.ptr.segment;
+                cout << operand.ptr.offset << "] ";
                 break;
             case ZYDIS_OPERAND_TYPE_IMMEDIATE:
-                printf("%x ", operand.imm.value);
+                cout << setw(16) << setfill('0') << hex << operand.imm.value.s << ' ';
                 break;
             default:
-                printf("? ");
+                cout << "? ";
             }
         }
 
-        printf("%c\n", instruction.meta.branch_type ? '^' : '|');
+        cout << (instruction.meta.branch_type ? '^' : '|') << endl;
 
         offset += instruction.length;
     }
