@@ -1,5 +1,7 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
+#include <string>
 #include <Zydis/Zydis.h>
 #include "register_names.h"
 using namespace std;
@@ -12,8 +14,19 @@ void dumpBytes(const ZyanU8 *data, int len) {
     cout << ' ';
 }
 
-int main()
-{
+template <typename HexInteger>
+string signedHex(HexInteger value) {
+    stringstream stream;
+    if(value < 0) {
+        stream << '-';
+        value = -value;
+    }
+    stream << setfill('0') << hex << value;
+    string out = stream.str();
+    return out;
+}
+
+int main() {
     ZyanU8 data[] =
     {
         0x51, 0x8D, 0x45, 0xFF, 0x50, 0xFF, 0x75, 0x0C, 0xFF, 0x75,
@@ -86,8 +99,8 @@ int main()
                 }
 
                 cout << '[' << segment << ':' << base
-                    << " + " << index << ':' << displacement
-                    << " *" << scale + 1 << "] ";
+                    << " + " << index << ':' << signedHex(displacement)
+                    << " * " << scale + 1 << "] ";
             }
                 break;
             case ZYDIS_OPERAND_TYPE_POINTER:
